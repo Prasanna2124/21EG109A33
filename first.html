@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Average Calculator Microservice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input[type="text"], button {
+            margin: 5px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        .response-container {
+            margin-top: 20px;
+        }
+        pre {
+            background-color: hwb(0 96% 4%);
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Calculator </h1>
+
+    <label for="numberType">Number Type:</label>
+    <input type="text" id="numberType" placeholder="e.g., p, f, e, r" maxlength="1">
+    <button onclick="fetchNumbers()">Fetch Numbers</button>
+
+    <div class="response-container">
+        <h2>Response</h2>
+        <pre id="response"></pre>
+    </div>
+
+    <script>
+        async function fetchNumbers() {
+            const numberType = document.getElementById('numberType').value;
+            const url = `http://localhost:9876/numbers/${numberType}`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                document.getElementById('response').textContent = JSON.stringify(data, null, 4);
+            } catch (error) {
+                document.getElementById('response').textContent = `Error: ${error.message}`;
+            }
+        }
+    </script>
+
+</body>
+</html>
